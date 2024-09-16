@@ -17,6 +17,8 @@
             var sum = _.sum(numbers);
             var now = moment().format('MMMM Do YYYY, h:mm:ss a');
             $('#demo').text('Sum: ' + sum + ', Current time: ' + now);
+            var userInput = "alert('XSS attack!')";
+            dangerousEval(userInput);
         });
 
         // 潜在的なセキュリティの問題を含む関数（デモ用）
