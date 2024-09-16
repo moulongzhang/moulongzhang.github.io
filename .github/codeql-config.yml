@@ -5,4 +5,4 @@ queries:
 paths-ignore:
   - 'others/**'
 paths:
-  - '**'
+  - '/'
