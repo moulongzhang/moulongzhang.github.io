@@ -1,9 +1,8 @@
 name: "CodeQL config"
 disable-default-queries: false
 queries:
+  - uses: security-and-quality
   - uses: security-extended
-  - name: Custom eval check
-    uses: ./.github/codeql/custom-queries/eval-usage.ql
 paths-ignore:
   - 'others/**'
 paths:
