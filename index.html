@@ -1,1 +1,28 @@
-Hello World
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQL and Dependabot Demo</title>
+    <script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+</head>
+<body>
+    <h1>Hello World</h1>
+    <p id="demo"></p>
+    <script>
+        $(document).ready(function() {
+            var numbers = [1, 2, 3, 4, 5];
+            var sum = _.sum(numbers);
+            var now = moment().format('MMMM Do YYYY, h:mm:ss a');
+            $('#demo').text('Sum: ' + sum + ', Current time: ' + now);
+        });
+
+        // 潜在的なセキュリティの問題を含む関数（デモ用）
+        function dangerousEval(input) {
+            return eval(input);
+        }
+    </script>
+</body>
+</html>
