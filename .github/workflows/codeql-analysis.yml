@@ -1,4 +1,4 @@
-name: "CodeQL"
+name: "CodeQL-Customized"
 
 on:
   push:
@@ -24,15 +24,15 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
+      uses: github/codeql-action/init@v3
       with:
-        languages: javascript
-        queries: security-and-quality
+        languages: ${{ matrix.language }}
+        config-file: .github/codeql/codeql-config.yml
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
+      uses: github/codeql-action/analyze@v3
       with:
         category: "/language:${{matrix.language}}"
