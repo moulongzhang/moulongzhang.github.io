@@ -11,19 +11,54 @@
 <body>
     <h1>CodeQL and Dependabot Demo</h1>
     <p id="demo"></p>
+    <input type="text" id="userInput" placeholder="Enter your name">
+    <button onclick="greetUser()">Greet</button>
+    <div id="greeting"></div>
+
     <script>
         $(document).ready(function() {
             var numbers = [1, 2, 3, 4, 5];
             var sum = _.sum(numbers);
             var now = moment().format('MMMM Do YYYY, h:mm:ss a');
             $('#demo').text('Sum: ' + sum + ', Current time: ' + now);
-            var userInput = "alert('XSS attack!')";
-            dangerousEval(userInput);
         });
+
+        // XSS脆弱性 - ユーザー入力を直接DOMに挿入
+        function greetUser() {
+            var name = document.getElementById('userInput').value;
+            document.getElementById('greeting').innerHTML = 'Hello, ' + name + '!';
+        }
+
+        // プロトタイプ汚染脆弱性
+        function merge(target, source) {
+            for (let key in source) {
+                if (typeof source[key] === 'object') {
+                    target[key] = merge(target[key] || {}, source[key]);
+                } else {
+                    target[key] = source[key];
+                }
+            }
+            return target;
+        }
+
+        // 安全でないデシリアライゼーション
+        function deserialize(data) {
+            return JSON.parse(data);
+        }
 
         // 潜在的なセキュリティの問題を含む関数（デモ用）
         function dangerousEval(input) {
             return eval(input);
+        }
+
+        // 安全でないなランダム値生成
+        function generateToken() {
+            return Math.random().toString(36).substr(2);
+        }
+
+        // パスワードを平文で保存
+        function savePassword(username, password) {
+            localStorage.setItem(username, password);
         }
     </script>
 </body>
