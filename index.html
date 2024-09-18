@@ -18,7 +18,7 @@
     <script>
         // デモ用のシークレット一覧
         const PLACEHOLDER_API_KEY = "api_key_1234567890abcdef1234567890abcdef";
-        const PLACEHOLDER_AWS_KEY = "AKIAIOSFODNN7EXAMPLE";
+        const PLACEHOLDER_AWS_KEY = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
         const PLACEHOLDER_GITHUB_TOKEN = "ghp_aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789";
 
 
@@ -65,6 +65,16 @@
         // パスワードを平文で保存
         function savePassword(username, password) {
             localStorage.setItem(username, password);
+        }
+
+        // Using placeholder secrets (DO NOT USE REAL SECRETS LIKE THIS)
+        function makeApiCall() {
+            // This is just a placeholder and should never be done with real secrets
+            fetch('https://api.example.com/data', {
+                headers: {
+                    'Authorization': 'Bearer ' + PLACEHOLDER_API_KEY
+                }
+            });
         }
     </script>
 </body>
