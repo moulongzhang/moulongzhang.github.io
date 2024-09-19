@@ -23,9 +23,6 @@
             $('#demo').text('Current time: ' + now);
         });
 
-        // デモ用のシークレット一覧
-        const PLACEHOLDER_GITHUB_TOKEN = "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";
-
         // XSS脆弱性 - ユーザー入力を直接DOMに挿入
         function greetUser() {
             var name = document.getElementById('userInput').value;
@@ -36,6 +33,10 @@
         function savePassword(username, password) {
             localStorage.setItem(username, password);
         }
+
+        // デモ用のシークレット一覧
+        const PLACEHOLDER_GITHUB_TOKEN = "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";
+
     </script>
 </body>
 </html>
