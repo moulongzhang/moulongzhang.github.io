@@ -26,7 +26,7 @@
         // XSS脆弱性 - ユーザー入力を直接DOMに挿入
         function greetUser() {
             var name = document.getElementById('userInput').value;
-            document.getElementById('greeting').innerHTML = 'Hello, ' + name + '!';
+            document.getElementById('greeting').textContent = 'Hello, ' + name + '!';
         }
 
         // パスワードを平文で保存
