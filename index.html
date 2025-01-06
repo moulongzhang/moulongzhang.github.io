@@ -12,8 +12,8 @@
     <style>
         .logo {
             position: absolute;
-            width: 30px;
-            height: 30px;
+            width: 20px;
+            height: 20px;
             animation: move 5s infinite;
         }
 
@@ -23,6 +23,10 @@
             50% { transform: translate(100px, 100px); }
             75% { transform: translate(0, 100px); }
             100% { transform: translate(0, 0); }
+        }
+
+        .smooth-move {
+            transition: transform 1s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
     </style>
 </head>
@@ -59,19 +63,21 @@
             logos.forEach(function(logo) {
                 logo.style.top = Math.random() * window.innerHeight + 'px';
                 logo.style.left = Math.random() * window.innerWidth + 'px';
+                logo.classList.add('smooth-move');
             });
+            requestAnimationFrame(animateLogos);
         }
 
-        setInterval(animateLogos, 1000);
+        requestAnimationFrame(animateLogos);
     </script>
 
-    <div class="logo" style="top: 50px; left: 50px;">
+    <div class="logo smooth-move" style="top: 50px; left: 50px;">
         <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub Logo">
     </div>
-    <div class="logo" style="top: 150px; left: 150px;">
+    <div class="logo smooth-move" style="top: 150px; left: 150px;">
         <img src="https://octodex.github.com/images/daftpunktocat-thomas.gif" alt="Daftpunktocat Thomas">
     </div>
-    <div class="logo" style="top: 250px; left: 250px;">
+    <div class="logo smooth-move" style="top: 250px; left: 250px;">
         <img src="https://octodex.github.com/images/daftpunktocat-guy.gif" alt="Daftpunktocat Guy">
     </div>
 </body>
