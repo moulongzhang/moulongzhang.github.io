@@ -37,6 +37,7 @@ jobs:
 
       - name: Run ESLint
         env:
+          ESLINT_USE_FLAT_CONFIG: "true"
           SARIF_ESLINT_IGNORE_SUPPRESSED: "true"
         run: npx eslint . 
           --config eslint.config.mjs 
