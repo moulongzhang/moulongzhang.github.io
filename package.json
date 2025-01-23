@@ -12,6 +12,6 @@
       "moment": "2.30.1"
     },
     "devDependencies": {
-      "http-server": "^0.12.3"
+      "http-server": "^14.1.1"
     }
   }
