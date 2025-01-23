@@ -7,3 +7,4 @@ paths-ignore:
   - 'others/**'
 paths:
   - 'index.html'
+  - 'logic.js'

@@ -6,6 +6,7 @@ const axios = window.axios;
 $(document).ready(function () {
     var now = moment().format('MMMM Do YYYY, h:mm:ss a');
     $('#demo').text('Current time: ' + now);
+    $('#greetButton').on('click', greetUser);
 });
 
 export function greetUser () {
