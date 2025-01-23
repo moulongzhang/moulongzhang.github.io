@@ -2,7 +2,7 @@ name: "CodeQL-Customized"
 
 on:
   push:
-    branches: [ master, feature/separate_DOM ]
+    branches: [ master ]
   pull_request:
     branches: [ master ]
   schedule:
