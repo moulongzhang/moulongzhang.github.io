@@ -1,6 +1,6 @@
 const moment = window.moment;
 const _ = window._;
-const $ = window.jQuery;
+const $ = window.jQuery
 const axios = window.axios;
 
 $(document).ready(function () {
@@ -11,8 +11,8 @@ $(document).ready(function () {
 
 export function greetUser () {
     var name = document.getElementById('userInput').value;
-    if (name === "") {
-        name = "guest";
+    if (name == "") {
+        name = 　　"guest";
     }
     document.getElementById('greeting').innerHTML = 'Hello, ' + name + '!';
 }
@@ -56,7 +56,7 @@ fetchGitHubUserData('octocat').then(data => {
 
 
 // SQL Injection
-export async function queryUserData(userId) {
+export async function queryUserData (userId) {
     const query = `SELECT * FROM users WHERE id = ${userId}`;
     try {
         const response = await axios.post('/api/query', { sql: query });
@@ -68,7 +68,7 @@ export async function queryUserData(userId) {
 }
 
 // Prototype pollution
-export function mergeObjects(target, source) {
+export function mergeObjects (target, source) {
     for (let key in source) {
         if (typeof source[key] === 'object') {
             target[key] = mergeObjects(target[key], source[key]);
