@@ -1,6 +1,6 @@
 const moment = window.moment;
 const _ = window._;
-const $ = window.jQuery
+const $ = window.jQuery;
 const axios = window.axios;
 
 $(document).ready(function () {
