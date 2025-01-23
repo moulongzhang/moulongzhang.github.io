@@ -4,38 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dependabot, CodeQL, and Secret Scanning Demo </title>
-
-    <!-- 外部ライブラリの参照 -->
-    <script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.2/axios.min.js"></script>
 </head>
 <body>
     <h1>Dependabot, CodeQL, and Secret Scanning Demo</h1>
     <p id="demo"></p>
     <input type="text" id="userInput" placeholder="Enter your name">
-    <button onclick="greetUser()">Greet</button>
+    <button id="greetButton">Greet</button>
     <div id="greeting"></div>
 
-    <script>
-        $(document).ready(function() {
-            var now = moment().format('MMMM Do YYYY, h:mm:ss a');
-            $('#demo').text('Current time: ' + now);
-        });
-
-        // XSS脆弱性 - ユーザー入力を直接DOMに挿入
-        function greetUser() {
-            var name = document.getElementById('userInput').value;
-            document.getElementById('greeting').innerHTML = 'Hello, ' + name + '!';
-        }
-
-        // パスワードを平文で保存
-        function savePassword(username, password) {
-            localStorage.setItem(username, password);
-        }
-
-        // デモ用のシークレット一覧
-        const PLACEHOLDER_GITHUB_TOKEN = "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";
-    </script>
+    <script src="logic.js" type="module"></script>
 </body>
 </html>
