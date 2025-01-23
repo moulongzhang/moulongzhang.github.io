@@ -9,26 +9,6 @@
     <script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-    <style>
-        .logo {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            animation: move 5s infinite;
-        }
-
-        @keyframes move {
-            0% { transform: translate(0, 0); }
-            25% { transform: translate(100px, 0); }
-            50% { transform: translate(100px, 100px); }
-            75% { transform: translate(0, 100px); }
-            100% { transform: translate(0, 0); }
-        }
-
-        .smooth-move {
-            transition: transform 1s cubic-bezier(0.25, 0.1, 0.25, 1);
-        }
-    </style>
 </head>
 <body>
     <h1>Dependabot, CodeQL, and Secret Scanning Demo</h1>
@@ -56,29 +36,6 @@
 
         // デモ用のシークレット一覧
         const PLACEHOLDER_GITHUB_TOKEN = "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";
-
-        // Function to animate logos
-        function animateLogos() {
-            var logos = document.querySelectorAll('.logo');
-            logos.forEach(function(logo) {
-                logo.style.top = Math.random() * window.innerHeight + 'px';
-                logo.style.left = Math.random() * window.innerWidth + 'px';
-                logo.classList.add('smooth-move');
-            });
-            requestAnimationFrame(animateLogos);
-        }
-
-        requestAnimationFrame(animateLogos);
     </script>
-
-    <div class="logo smooth-move" style="top: 50px; left: 50px;">
-        <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub Logo">
-    </div>
-    <div class="logo smooth-move" style="top: 150px; left: 150px;">
-        <img src="https://octodex.github.com/images/daftpunktocat-thomas.gif" alt="Daftpunktocat Thomas">
-    </div>
-    <div class="logo smooth-move" style="top: 250px; left: 250px;">
-        <img src="https://octodex.github.com/images/daftpunktocat-guy.gif" alt="Daftpunktocat Guy">
-    </div>
 </body>
 </html>
