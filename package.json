@@ -4,14 +4,21 @@
     "description": "A demo for CodeQL and Dependabot",
     "main": "index.js",
     "scripts": {
-      "start": "http-server"
+        "start": "http-server"
     },
     "dependencies": {
       "jquery": "3.5.0",
       "lodash": "4.17.15",
-      "moment": "2.30.1"
+      "moment": "2.24.0"
     },
     "devDependencies": {
-      "http-server": "^0.12.3"
-    }
-  }
+        "@eslint/js": "^9.18.0",
+        "eslint": "^9.18.0",
+        "eslint-plugin-html": "^8.1.2",
+        "globals": "^15.14.0",
+        "http-server": "^0.12.3"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}
