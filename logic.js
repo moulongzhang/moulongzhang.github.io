@@ -7,12 +7,17 @@ $(document).ready(function () {
     var now = moment().format('MMMM Do YYYY, h:mm:ss a');
     $('#demo').text('Current time: ' + now);
     $('#greetButton').on('click', greetUser);
+    $('#savePasswordButton').on('click', function() {
+        var username = $('#usernameInput').val();
+        var password = $('#passwordInput').val();
+        savePassword(username, password);
+    });
 });
 
 export function greetUser () {
     var name = document.getElementById('userInput').value;
     if (name == "") {
-        name = 　　"guest";
+        name = "guest";
     }
     document.getElementById('greeting').innerHTML = 'Hello, ' + name + '!';
 }
