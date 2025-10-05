@@ -1,2 +1,25 @@
 .github/codeql-config.yml
 .github/workflows/codeql-analysis.yml
+
+# Node modules
+node_modules/
+
+# Build artifacts
+dist/
+*.tar.gz
+
+# SBOM files
+sbom*.json
+*-sbom.json
+
+# Old README
+README_OLD.md
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

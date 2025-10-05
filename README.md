@@ -1,42 +1,53 @@
-_This is **italic and bold** text_ using a single underscore for italic and double asterisks for bold.
-__This is bold and *italic* text__ using double underscores for bold and single asterisks for italic.
+# moulongzhang.github.io
 
-\_This is all \*\*plain\*\* text\_.
+## 概要
+このリポジトリは、GitHub Actionsのセキュリティ機能のデモンストレーションプロジェクトです。
 
-###### This is H6 text
+## 実装されているセキュリティ機能
 
-![Link an image.](/learn/azure-devops/shared/media/mara.png)
+### 🔐 Artifact Attestation（アーティファクト構成証明）
+ビルド成果物とコンテナイメージの構成証明を自動生成し、サプライチェーンのセキュリティを強化しています。
 
-[Link to Microsoft Training](/training)
+- ✅ ビルド実績証明 (Build Provenance)
+- ✅ SBOM構成証明 (Software Bill of Materials)
+- ✅ コンテナイメージ構成証明
 
-1. First
-1. Second
-1. Third
+詳細は [ATTESTATION.md](./ATTESTATION.md) をご覧ください。
 
-- First
-  - Nested
-- Second
-- Third
+### 🔍 CodeQL
+コードの静的解析によるセキュリティ脆弱性の検出
 
-First|Second
--|-
-1|2
-3|4
+### 🤖 Dependabot
+依存関係の脆弱性を自動検出し、更新プルリクエストを作成
 
-> This is quoted text.
+### 🔑 Secret Scanning
+コミットされたシークレットの検出と警告
 
-Here is a<br />line break
+## ワークフロー
 
-This is `code`.
+- **Build and Attest** (`.github/workflows/build-and-attest.yml`): ビルド成果物の構成証明生成
+- **Docker Attest** (`.github/workflows/docker-attest.yml`): コンテナイメージの構成証明生成
+- **ESLint** (`.github/workflows/eslint.yml`): コード品質チェック
 
-```markdown
-var first = 1;
-var second = 2;
-var sum = first + second;
+## セットアップ
+
+```bash
+# 依存関係のインストール
+npm install
+
+# 開発サーバーの起動
+npm start
 ```
 
-```javascript
-var first = 1;
-var second = 2;
-var sum = first + second;
+## 構成証明の検証
+
+```bash
+# GitHub CLIで構成証明を検証
+gh attestation verify website-artifact.tar.gz -R moulongzhang/moulongzhang.github.io
+
+# コンテナイメージの検証
+gh attestation verify oci://ghcr.io/moulongzhang/moulongzhang.github.io:main -R moulongzhang/moulongzhang.github.io
 ```
+
+## ライセンス
+MIT License

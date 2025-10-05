@@ -1,0 +1,91 @@
+name: Build and Attest
+
+on:
+  push:
+    branches: [ main, master, feature/* ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-attest:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      attestations: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create build artifact
+        run: |
+          mkdir -p dist
+          cp index.html dist/
+          cp -r node_modules dist/ || true
+          tar -czf website-artifact.tar.gz dist/
+
+      - name: Generate SBOM with GitHub CLI
+        run: |
+          # GitHub CLIを使用してSBOMを生成
+          # anchore/sbom-actionを使用する場合
+          npm install -g @cyclonedx/cyclonedx-npm
+          cyclonedx-npm --output-file sbom.json
+      
+      - name: Install Syft for SBOM generation
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+
+      - name: Generate SBOM with Syft
+        run: |
+          syft dir:. -o spdx-json=sbom-spdx.json
+          syft dir:. -o cyclonedx-json=sbom-cyclonedx.json
+
+      - name: Generate artifact attestation for binary
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: 'website-artifact.tar.gz'
+
+      - name: Generate SBOM attestation (SPDX format)
+        uses: actions/attest-sbom@v2
+        with:
+          subject-path: 'website-artifact.tar.gz'
+          sbom-path: 'sbom-spdx.json'
+
+      - name: Generate SBOM attestation (CycloneDX format)
+        uses: actions/attest-sbom@v2
+        with:
+          subject-path: 'website-artifact.tar.gz'
+          sbom-path: 'sbom-cyclonedx.json'
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: website-build
+          path: |
+            website-artifact.tar.gz
+            sbom-spdx.json
+            sbom-cyclonedx.json
+          retention-days: 30
+
+      - name: Display attestation info
+        run: |
+          echo "✅ Artifact attestations have been generated!"
+          echo "📦 Build artifact: website-artifact.tar.gz"
+          echo "📋 SBOM files: sbom-spdx.json, sbom-cyclonedx.json"
+          echo ""
+          echo "To verify attestations locally, use:"
+          echo "gh attestation verify website-artifact.tar.gz -R ${{ github.repository }}"
