@@ -2,9 +2,9 @@
 
 Personal website for William Zhang, AI GTM Lead at GitHub.
 
-The site is a lightweight, responsive static page published with GitHub Pages
-from the `master` branch. It highlights enterprise AI adoption, GitHub Copilot,
-developer experience, technical enablement, and selected public work.
+The site is a lightweight, responsive single-viewport profile published with
+GitHub Pages from the `master` branch. It introduces William's enterprise AI
+positioning and links to his public social profiles.
 
 ## Local preview
 
