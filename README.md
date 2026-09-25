@@ -1,42 +1,18 @@
-_This is **italic and bold** text_ using a single underscore for italic and double asterisks for bold.
-__This is bold and *italic* text__ using double underscores for bold and single asterisks for italic.
+# moulongzhang.github.io
 
-\_This is all \*\*plain\*\* text\_.
+Personal website for William Zhang, AI Specialist in Japan at GitHub.
 
-###### This is H6 text
+The site is a lightweight, responsive static page published with GitHub Pages
+from the `master` branch. It highlights enterprise AI adoption, GitHub Copilot,
+developer experience, technical enablement, and selected public work.
 
-![Link an image.](/learn/azure-devops/shared/media/mara.png)
+## Local preview
 
-[Link to Microsoft Training](/training)
-
-1. First
-1. Second
-1. Third
-
-- First
-  - Nested
-- Second
-- Third
-
-First|Second
--|-
-1|2
-3|4
-
-> This is quoted text.
-
-Here is a<br />line break
-
-This is `code`.
-
-```markdown
-var first = 1;
-var second = 2;
-var sum = first + second;
+```bash
+python3 -m http.server 8000
 ```
 
-```javascript
-var first = 1;
-var second = 2;
-var sum = first + second;
-```
+Then open <http://localhost:8000>.
+
+The previous GitHub Advanced Security demo is preserved at
+[moulongzhang/GitHub-Advanced-Security-Demo](https://github.com/moulongzhang/GitHub-Advanced-Security-Demo).

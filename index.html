@@ -1,41 +1,585 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dependabot, CodeQL, and Secret Scanning Demo </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("scoutTheme");
+      const theme =
+        param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <title>William Zhang · AI Specialist at GitHub</title>
+  <meta name="description" content="William Zhang helps enterprises connect AI strategy, implementation, and sustained adoption through GitHub Copilot, developer experience, and enablement.">
+  <meta property="og:title" content="William Zhang · AI Specialist at GitHub">
+  <meta property="og:description" content="Enterprise AI adoption, GitHub Copilot, developer experience, and technical enablement in Japan.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://moulongzhang.github.io">
+  <meta property="og:image" content="https://moulongzhang.github.io/assets/william-zhang.jpg">
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f7f4ef;
+      --cp-bg-elevated: #fcfbf8;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #f5f5f5;
+      --cp-border: #dedede;
+      --cp-border-strong: #919191;
+      --cp-text: #242424;
+      --cp-text-muted: #5c5c5c;
+      --cp-text-soft: #6f6f6f;
+      --cp-accent: #b11f4b;
+      --cp-accent-hover: #9a1a41;
+      --cp-accent-soft: rgba(177, 31, 75, 0.08);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16a34a;
+      --cp-danger: #dc2626;
+      --cp-warning: #f59e0b;
+      --cp-link: #0078d4;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+      --cp-overlay: rgba(255, 255, 255, 0.8);
+      --cp-panel: rgba(255, 255, 255, 0.86);
+      --cp-panel-strong: rgba(255, 255, 255, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.55);
+      --cp-highlight: rgba(177, 31, 75, 0.12);
+    }
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #3d3b3a;
+      --cp-bg-elevated: #343231;
+      --cp-surface: #292929;
+      --cp-surface-soft: #2e2e2e;
+      --cp-border: #474747;
+      --cp-border-strong: #5f5f5f;
+      --cp-text: #dedede;
+      --cp-text-muted: #919191;
+      --cp-text-soft: #b0b0b0;
+      --cp-accent: #fd8ea1;
+      --cp-accent-hover: #fb7b91;
+      --cp-accent-soft: rgba(253, 142, 161, 0.14);
+      --cp-accent-fg: #1a1a1a;
+      --cp-success: #4ade80;
+      --cp-danger: #f87171;
+      --cp-warning: #fbbf24;
+      --cp-link: #4da6ff;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+      --cp-overlay: rgba(41, 41, 41, 0.88);
+      --cp-panel: rgba(41, 41, 41, 0.72);
+      --cp-panel-strong: rgba(41, 41, 41, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.04);
+      --cp-highlight: rgba(253, 142, 161, 0.12);
+    }
 
-    <!-- 外部ライブラリの参照 -->
-    <script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    a {
+      color: var(--cp-link);
+      text-underline-offset: 0.2em;
+    }
+
+    a:hover {
+      color: var(--cp-accent-hover);
+    }
+
+    a:focus-visible {
+      outline: 3px solid var(--cp-accent);
+      outline-offset: 4px;
+      border-radius: 0.25rem;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: 1rem;
+      top: -5rem;
+      z-index: 10;
+      padding: 0.5rem 0.75rem;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      border-radius: 0.625rem;
+    }
+
+    .skip-link:focus {
+      top: 1rem;
+    }
+
+    .page {
+      width: min(70rem, calc(100% - 2rem));
+      margin: 0 auto;
+    }
+
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.5rem 0;
+    }
+
+    .brand {
+      color: var(--cp-text);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .nav a {
+      color: var(--cp-text-muted);
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .nav a:hover {
+      color: var(--cp-accent);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(15rem, 0.6fr);
+      align-items: center;
+      gap: clamp(2rem, 7vw, 5rem);
+      min-height: 36rem;
+      padding: 5rem 0 6rem;
+    }
+
+    .eyebrow {
+      margin: 0 0 0.75rem;
+      color: var(--cp-accent);
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 12ch;
+      margin-bottom: 1.25rem;
+      font-size: clamp(2.75rem, 8vw, 5.75rem);
+      line-height: 0.98;
+      letter-spacing: -0.045em;
+    }
+
+    .intro {
+      max-width: 42rem;
+      margin-bottom: 2rem;
+      color: var(--cp-text-soft);
+      font-size: clamp(1.15rem, 2vw, 1.4rem);
+      line-height: 1.55;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 2.75rem;
+      padding: 0.65rem 1rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 0.625rem;
+      color: var(--cp-text);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .button:hover {
+      border-color: var(--cp-accent);
+      color: var(--cp-accent);
+    }
+
+    .button-primary {
+      border-color: var(--cp-accent);
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+    }
+
+    .button-primary:hover {
+      border-color: var(--cp-accent-hover);
+      background: var(--cp-accent-hover);
+      color: var(--cp-accent-fg);
+    }
+
+    .portrait-wrap {
+      position: relative;
+      max-width: 24rem;
+      justify-self: end;
+    }
+
+    .portrait-wrap::before {
+      position: absolute;
+      inset: 1rem -1rem -1rem 1rem;
+      z-index: -1;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 16px;
+      content: "";
+    }
+
+    .portrait {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      object-fit: cover;
+    }
+
+    .section {
+      padding: 5rem 0;
+      border-top: 1px solid var(--cp-border);
+    }
+
+    .section-heading {
+      display: grid;
+      grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 1.3fr);
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    h2 {
+      margin-bottom: 0;
+      font-size: clamp(1.8rem, 4vw, 2.75rem);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+
+    .section-heading p {
+      max-width: 42rem;
+      margin-bottom: 0;
+      color: var(--cp-text-muted);
+    }
+
+    .focus-grid,
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .focus-card,
+    .work-card {
+      padding: 1.5rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface);
+    }
+
+    .focus-card {
+      min-height: 14rem;
+    }
+
+    .card-number {
+      margin-bottom: 3rem;
+      color: var(--cp-accent);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 0.85rem;
+    }
+
+    h3 {
+      margin-bottom: 0.65rem;
+      font-size: 1.15rem;
+      line-height: 1.35;
+    }
+
+    .focus-card p,
+    .work-card p {
+      margin-bottom: 0;
+      color: var(--cp-text-muted);
+      font-size: 0.95rem;
+    }
+
+    .work-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .work-card {
+      display: flex;
+      min-height: 13rem;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .work-card a {
+      color: var(--cp-text);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .work-card a::after {
+      color: var(--cp-accent);
+      content: " ↗";
+    }
+
+    .work-card a:hover {
+      color: var(--cp-accent);
+    }
+
+    .about {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(14rem, 0.8fr);
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .about p {
+      max-width: 42rem;
+      color: var(--cp-text-soft);
+      font-size: 1.12rem;
+    }
+
+    .details {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .details li {
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--cp-border);
+    }
+
+    .details strong {
+      display: block;
+      color: var(--cp-text-muted);
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .site-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 2rem 0 3rem;
+      border-top: 1px solid var(--cp-border);
+      color: var(--cp-text-muted);
+      font-size: 0.9rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    @media (max-width: 48rem) {
+      .hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        padding: 3rem 0 5rem;
+      }
+
+      .hero-copy {
+        order: 2;
+      }
+
+      .portrait-wrap {
+        width: min(19rem, calc(100% - 1rem));
+        justify-self: start;
+      }
+
+      .section-heading,
+      .about {
+        grid-template-columns: 1fr;
+      }
+
+      .focus-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 36rem) {
+      .site-header,
+      .site-footer {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav {
+        gap: 0.75rem;
+      }
+
+      .work-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section {
+        padding: 4rem 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>Dependabot, CodeQL, and Secret Scanning Demo</h1>
-    <p id="demo"></p>
-    <input type="text" id="userInput" placeholder="Enter your name">
-    <button onclick="greetUser()">Greet</button>
-    <div id="greeting"></div>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-    <script>
-        $(document).ready(function() {
-            var now = moment().format('MMMM Do YYYY, h:mm:ss a');
-            $('#demo').text('Current time: ' + now);
-        });
+  <header class="page site-header">
+    <a class="brand" href="/">William Zhang</a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a href="#focus">Focus</a>
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+    </nav>
+  </header>
 
-        // XSS脆弱性 - ユーザー入力を直接DOMに挿入
-        function greetUser() {
-            var name = document.getElementById('userInput').value;
-            document.getElementById('greeting').innerHTML = 'Hello, ' + name + '!';
-        }
+  <main id="main" class="page">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow">AI Specialist, Japan at GitHub</p>
+        <h1 id="hero-title">Enterprise AI, built to last.</h1>
+        <p class="intro">
+          I help enterprises connect AI strategy, implementation, and sustained
+          adoption through GitHub Copilot, better developer experience, and
+          practical technical enablement.
+        </p>
+        <div class="actions" role="group" aria-label="Social profiles">
+          <a class="button button-primary" href="https://www.linkedin.com/in/moulongzhang" target="_blank" rel="noreferrer">LinkedIn</a>
+          <a class="button" href="https://github.com/moulongzhang" target="_blank" rel="noreferrer">GitHub</a>
+          <a class="button" href="https://x.com/moulongzhang" target="_blank" rel="noreferrer">X</a>
+        </div>
+      </div>
+      <div class="portrait-wrap">
+        <img class="portrait" src="assets/william-zhang.jpg" width="720" height="720" alt="William Zhang speaking at a technology event">
+      </div>
+    </section>
 
-        // パスワードを平文で保存
-        function savePassword(username, password) {
-            localStorage.setItem(username, password);
-        }
+    <section id="focus" class="section" aria-labelledby="focus-title">
+      <div class="section-heading">
+        <h2 id="focus-title">Where I focus</h2>
+        <p>
+          Connecting the organizational, technical, and human parts of AI
+          adoption so teams can move with clarity and keep improving.
+        </p>
+      </div>
+      <div class="focus-grid">
+        <article class="focus-card">
+          <div class="card-number">01</div>
+          <h3>Enterprise AI and GitHub Copilot</h3>
+          <p>Moving from experimentation to responsible, repeatable adoption across engineering organizations.</p>
+        </article>
+        <article class="focus-card">
+          <div class="card-number">02</div>
+          <h3>Developer and field experience</h3>
+          <p>Connecting product capabilities with real development workflows, technical teams, and business goals.</p>
+        </article>
+        <article class="focus-card">
+          <div class="card-number">03</div>
+          <h3>Scalable workshops and enablement</h3>
+          <p>Creating practical learning experiences that help teams build confidence and extend what they learn.</p>
+        </article>
+      </div>
+    </section>
 
-        // デモ用のシークレット一覧
-        const PLACEHOLDER_GITHUB_TOKEN = "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";
-    </script>
+    <section id="work" class="section" aria-labelledby="work-title">
+      <div class="section-heading">
+        <h2 id="work-title">Selected public work</h2>
+        <p>
+          Open resources for hands-on learning, adoption visibility, and
+          customer-facing technical experiences.
+        </p>
+      </div>
+      <div class="work-grid">
+        <article class="work-card">
+          <div>
+            <h3>2026 GitHub Copilot Workshop</h3>
+            <p>Hands-on workshop resources for practical GitHub Copilot learning.</p>
+          </div>
+          <a href="https://github.com/moulongzhang/2026-Github-Copilot-Workshop" target="_blank" rel="noreferrer">View repository</a>
+        </article>
+        <article class="work-card">
+          <div>
+            <h3>2026 GitHub Copilot Workshop — English</h3>
+            <p>English-language materials for teams learning and applying GitHub Copilot.</p>
+          </div>
+          <a href="https://github.com/moulongzhang/2026-Github-Copilot-Workshop-English" target="_blank" rel="noreferrer">View repository</a>
+        </article>
+        <article class="work-card">
+          <div>
+            <h3>Tailspin Toys JA</h3>
+            <p>A Japanese GitHub Copilot app workshop for beginner-friendly, guided practice.</p>
+          </div>
+          <a href="https://github.com/moulongzhang/Tailspin-Toys-JA" target="_blank" rel="noreferrer">View repository</a>
+        </article>
+        <article class="work-card">
+          <div>
+            <h3>Copilot Metrics Dashboard</h3>
+            <p>A public project for visualizing GitHub Copilot adoption and usage data.</p>
+          </div>
+          <a href="https://github.com/moulongzhang/copilot-metrics-dashboard" target="_blank" rel="noreferrer">View repository</a>
+        </article>
+        <article class="work-card">
+          <div>
+            <h3>GitHub × Figma Mixer</h3>
+            <p>An event experience and supporting site connecting design and development communities.</p>
+          </div>
+          <a href="https://github.com/moulongzhang/github-figma-mixer" target="_blank" rel="noreferrer">View repository</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="about" class="section about" aria-labelledby="about-title">
+      <div>
+        <p class="eyebrow">Background</p>
+        <h2 id="about-title">Technical depth, customer context.</h2>
+        <p>
+          My background spans software development and solution architecture,
+          supported by a BMath in Statistics from the University of Waterloo.
+          Today I work with teams in Japan to turn AI ambition into useful,
+          sustainable engineering practices.
+        </p>
+      </div>
+      <ul class="details">
+        <li><strong>Role</strong>AI Specialist, Japan at GitHub</li>
+        <li><strong>Education</strong>BMath in Statistics, University of Waterloo</li>
+        <li><strong>Languages</strong>Japanese / English / Chinese</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="page site-footer">
+    <span>© William Zhang</span>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/moulongzhang" target="_blank" rel="noreferrer">LinkedIn</a>
+      <a href="https://x.com/moulongzhang" target="_blank" rel="noreferrer">X</a>
+      <a href="https://github.com/moulongzhang" target="_blank" rel="noreferrer">GitHub</a>
+    </div>
+  </footer>
 </body>
 </html>
