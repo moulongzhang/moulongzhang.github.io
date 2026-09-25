@@ -1,6 +1,6 @@
 # moulongzhang.github.io
 
-Personal website for William Zhang, AI Specialist in Japan at GitHub.
+Personal website for William Zhang, AI GTM Lead at GitHub.
 
 The site is a lightweight, responsive static page published with GitHub Pages
 from the `master` branch. It highlights enterprise AI adoption, GitHub Copilot,
